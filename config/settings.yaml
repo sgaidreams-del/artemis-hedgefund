@@ -1,0 +1,100 @@
+# Main settings — reference defaults per SPEC §C.
+
+environment: paper        # paper | live
+
+portfolio:
+  initial_capital: 100000
+  target_volatility: 0.15
+  max_position_pct: 0.05
+  max_sector_pct: 0.25
+  min_cash_pct: 0.10
+  rebalance_threshold_pct: 0.005
+  # Gross exposure / equity cap. This is a cash account (no margin
+  # authorized), so 1.0 means "never more invested than total equity."
+  max_gross_leverage: 1.0
+
+risk:
+  daily_drawdown_halt: -0.03
+  weekly_drawdown_reduce: -0.05
+  max_drawdown_liquidate: -0.15
+  max_portfolio_beta: 1.3
+  max_correlation: 0.80
+  # Behavior on a loss/drawdown breach: freeze (block new orders, keep
+  # positions) or flatten (also liquidate). Freeze chosen deliberately —
+  # for a paper-tuning loop the exit itself can be adverse and we'd rather
+  # stop and review than force liquidation. Enforced in Phase 3.
+  breach_behavior: freeze
+  # Halt if the trailing N closed days (portfolio_snapshots.daily_return)
+  # were all losses — catches a slow bleed that no single-day check would.
+  consecutive_loss_days_halt: 3
+  # Book-level options delta-equivalent exposure cap, as a % of portfolio
+  # value. Mechanism-only until delta_snapshot starts being populated (see
+  # execution.options.delta_equivalent_exposure) — there's no Greeks/pricing
+  # engine wired up yet, this just makes sure the cap is real once there is.
+  max_delta_exposure_pct: 0.20
+
+models:
+  qlib_retrain_day: Saturday
+  finrl_retrain_day: 1
+  regime_retrain_day: 1
+  walk_forward_train_days: 252
+  walk_forward_test_days: 63
+
+autoresearch:
+  max_experiments_per_week: 20
+  max_concurrent_live_changes: 1
+  shadow_period_days: 30
+  paper_burnin_days: 60
+  rollback_sharpe_threshold: -0.30
+  max_features: 50
+  weight_optimization_day: Saturday
+
+execution:
+  order_timeout_seconds: 90
+  limit_price_adjustment_pct: 0.0025
+  max_daily_turnover_pct: 0.30
+  # NEVER allow market orders — limit only with escalation
+  allowed_order_types: [limit, ioc-limit, aggressive-limit]
+  # ── Pre-trade gate (Phase 1) ──────────────────────────────────────────
+  # Fat-finger / units-bug ceilings on a single order. Placeholders to
+  # calibrate against capital — these are catastrophe catches, well above
+  # any normal order (a 5% position on $100k is ~$5k).
+  max_order_qty: 1000              # hard cap on shares/contracts per order
+  max_order_notional: 25000        # hard cap on $ per single order
+  # Reject a limit price deviating more than this from the reference quote
+  # (catches stale-quote and "buy at $0.01 / sell at $100k" bugs).
+  price_collar_pct: 0.05
+  # Runaway-loop guard: max orders the gate will admit per rolling minute.
+  max_orders_per_minute: 30
+  # Block orders when the market is closed unless explicitly overridden.
+  require_market_open: true
+  # Reject if the reference quote backing the price collar is older than
+  # this — catches a stale/lagging feed (the IEX free tier can lag) before
+  # it lets a bad collar reference through.
+  max_quote_age_seconds: 60
+
+data:
+  min_market_cap: 500000000
+  min_daily_volume: 5000000
+  min_price: 5.0
+  min_history_days: 252
+  quality_health_threshold: 80
+
+llm:
+  provider: deepseek
+  primary_model: deepseek-chat
+  judge_model: deepseek-reasoner
+  max_holdings_analyzed_per_day: 30
+  max_watchlist_analyzed_per_day: 20
+
+monitoring:
+  daily_report_time: "17:00 ET"
+  weekly_report_day: Saturday
+  dashboard_api_port: 8000
+  dashboard_web_port: 5173
+
+# Discord superseded by the web dashboard (see dashboard/). Left here only
+# in case it's re-enabled later; unset DISCORD_* in .env means it's inert.
+discord:
+  primary_channel: hedgefund
+  inbox_channel: agent-comms

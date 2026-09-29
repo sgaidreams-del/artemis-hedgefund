@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.artemis.pipeline</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <!-- Must be the project venv python — system /usr/bin/python3 lacks
+             transformers, gymnasium, lightgbm, etc. and would crash on import. -->
+        <string>__ARTEMIS_ROOT__/.venv/bin/python</string>
+        <string>__ARTEMIS_ROOT__/scripts/run_pipeline.py</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <array>
+        <!-- Monday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>1</integer>
+            <key>Hour</key>
+            <integer>17</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+        <!-- Tuesday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>2</integer>
+            <key>Hour</key>
+            <integer>17</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+        <!-- Wednesday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>3</integer>
+            <key>Hour</key>
+            <integer>17</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+        <!-- Thursday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>4</integer>
+            <key>Hour</key>
+            <integer>17</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+        <!-- Friday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>5</integer>
+            <key>Hour</key>
+            <integer>17</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__ARTEMIS_ROOT__</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>__HOME__/Library/Logs/artemis_pipeline.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>__HOME__/Library/Logs/artemis_pipeline_err.log</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>

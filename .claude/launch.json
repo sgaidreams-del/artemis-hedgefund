@@ -1,0 +1,20 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dashboard-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "dashboard",
+      "port": 5173,
+      "autoPort": false
+    },
+    {
+      "name": "dashboard-api",
+      "runtimeExecutable": ".venv/bin/uvicorn",
+      "runtimeArgs": ["dashboard_api.main:app", "--port", "8000"],
+      "port": 8000,
+      "autoPort": false
+    }
+  ]
+}

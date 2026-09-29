@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.artemis.trader</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__ARTEMIS_ROOT__/.venv/bin/python</string>
+        <string>__ARTEMIS_ROOT__/scripts/run_daily_trade.py</string>
+        <string>--scheduled</string>
+    </array>
+
+    <!-- 9:35am ET = 6:35am PT (Pacific Standard Time).
+         During Pacific Daylight Time (March–November) ET is UTC-4 and PT is UTC-7,
+         so this fires at 9:35am ET all year when the machine clock is in PT.
+         Adjust Hour to 7 during PST (November–March) if the machine observes DST
+         automatically and you want strict 9:35am ET execution year-round.
+         In practice the pretrade gate calls Alpaca's clock and rejects orders if
+         the market is closed, so a 1-hour slip just means no trades that day — it
+         does not cause incorrect trades. -->
+    <key>StartCalendarInterval</key>
+    <array>
+        <!-- Monday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>1</integer>
+            <key>Hour</key>
+            <integer>6</integer>
+            <key>Minute</key>
+            <integer>35</integer>
+        </dict>
+        <!-- Tuesday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>2</integer>
+            <key>Hour</key>
+            <integer>6</integer>
+            <key>Minute</key>
+            <integer>35</integer>
+        </dict>
+        <!-- Wednesday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>3</integer>
+            <key>Hour</key>
+            <integer>6</integer>
+            <key>Minute</key>
+            <integer>35</integer>
+        </dict>
+        <!-- Thursday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>4</integer>
+            <key>Hour</key>
+            <integer>6</integer>
+            <key>Minute</key>
+            <integer>35</integer>
+        </dict>
+        <!-- Friday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>5</integer>
+            <key>Hour</key>
+            <integer>6</integer>
+            <key>Minute</key>
+            <integer>35</integer>
+        </dict>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__ARTEMIS_ROOT__</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>__HOME__/Library/Logs/artemis_trader.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>__HOME__/Library/Logs/artemis_trader_err.log</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>

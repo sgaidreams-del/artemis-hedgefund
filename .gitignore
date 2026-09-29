@@ -1,0 +1,47 @@
+# Secrets
+.env
+*.pem
+*.key
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+coverage.xml
+*.db
+*.sqlite
+
+# Node / dashboard
+dashboard/node_modules/
+dashboard/dist/
+dashboard/.vite/
+
+# Data / models / logs (large, regenerable)
+data/
+!src/data/
+logs/
+models/
+experiments/
+research_journal/entries/
+walkforward_results.json
+
+# macOS / IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local tool config (machine-specific paths / permissions)
+.claude/settings.local.json
+
+# Stray dir created by an old plist that used an unexpanded ${HOME}
+/$*HOME*/

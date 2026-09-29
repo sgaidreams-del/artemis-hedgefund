@@ -1,0 +1,72 @@
+# Universe selection filters
+filters:
+  min_market_cap_usd: 500000000     # $500M
+  min_avg_daily_volume_usd: 5000000  # $5M
+  min_price_usd: 5.0
+  min_history_days: 252
+
+exclusions:
+  exclude_adr: true
+  exclude_spac: true
+  exclude_bdc: true
+  exclude_otc: true
+
+# Active trading universe — full signal computation + order routing runs on these.
+seed_tickers:
+  - SPY
+  - QQQ
+  # Mega-cap tech
+  - AAPL
+  - MSFT
+  - GOOGL
+  - AMZN
+  - NVDA
+  - META
+  - TSLA
+  # Healthcare / Pharma / Biotech
+  - UNH
+  - MRNA
+  - LLY
+  - PFE
+  # Financials
+  - JPM
+  - V
+  - BAC
+  # Energy
+  - XOM
+  - CVX
+  # Semis (beyond NVDA)
+  - AMD
+  # Consumer
+  - WMT
+
+# Extended watchlist — OHLCV collected daily, no full signal compute.
+# EOD mover scanner checks these and logs "Universe Miss" entries when
+# something outside the seed universe makes a big move.
+extended_watchlist:
+  - ABBV
+  - AMGN
+  - BIIB
+  - BMY
+  - GILD
+  - REGN
+  - AVGO
+  - INTC
+  - QCOM
+  - ARM
+  - TSM
+  - GS
+  - MA
+  - BRK.B
+  - GE
+  - BA
+  - CAT
+  - COP
+  - NFLX
+  - DIS
+  - COST
+  - HD
+  - NKE
+  - ORCL
+  - CRM
+  - ADBE

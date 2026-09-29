@@ -1,0 +1,72 @@
+# Celery / APScheduler job schedules (cron format, US/Pacific)
+# All times in market hours (ET) shown in comments
+
+jobs:
+  # ── Data layer ─────────────────────────────────────────────────────────────
+  price_intraday:
+    cron: "*/1 6-13 * * 1-5"      # every 1 min, 9:30-16:00 ET
+    task: src.data.collectors.price_collector:collect_intraday
+    enabled: true
+
+  price_eod:
+    cron: "30 13 * * 1-5"          # 16:30 ET
+    task: src.data.collectors.price_collector:collect_eod
+    enabled: true
+
+  news_rss:
+    cron: "*/15 * * * *"           # every 15 min
+    task: src.data.collectors.news_collector:collect
+    enabled: true
+
+  reddit_scrape:
+    cron: "*/15 * * * *"           # every 15 min
+    task: src.data.collectors.reddit_collector:collect
+    enabled: false                  # enable after credentials provided
+
+  fundamentals_daily:
+    cron: "0 15 * * 1-5"           # 18:00 ET
+    task: src.data.collectors.fundamentals_collector:collect
+    enabled: true
+
+  fred_macro_daily:
+    cron: "0 16 * * *"             # 19:00 ET every day
+    task: src.data.collectors.macro_collector:collect
+    enabled: true
+
+  sec_filings_check:
+    cron: "*/30 6-14 * * 1-5"      # every 30 min during market hours
+    task: src.data.collectors.sec_collector:collect_recent
+    enabled: false                  # enable after sec-edgar setup
+
+  short_interest_biweekly:
+    cron: "0 8 1,15 * *"           # 1st and 15th at 11:00 ET
+    task: src.data.collectors.alternative_collector:short_interest
+    enabled: false
+
+  # ── Quality & corporate actions ────────────────────────────────────────────
+  corporate_actions:
+    cron: "0 2 * * 1-5"            # 5:00 ET before everything else
+    task: src.data.corporate_actions.handler:run
+    enabled: true
+
+  data_quality_watchdog:
+    cron: "0 * * * *"              # every hour
+    task: src.data.quality.watchdog:run
+    enabled: true
+
+  # ── Feature store ──────────────────────────────────────────────────────────
+  feature_store_daily:
+    cron: "30 14 * * 1-5"          # 17:30 ET after EOD prices
+    task: src.data.feature_store.store:compute_daily
+    enabled: true
+
+  # ── Reporting ──────────────────────────────────────────────────────────────
+  daily_report:
+    cron: "0 14 * * 1-5"           # 17:00 ET
+    task: src.monitoring.reports.daily:generate_and_post
+    enabled: true
+
+  weekly_report:
+    cron: "0 6 * * 6"              # Saturday 9:00 ET
+    task: src.monitoring.reports.weekly:generate_and_post
+    enabled: true
