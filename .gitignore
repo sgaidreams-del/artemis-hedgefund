@@ -40,8 +40,8 @@ walkforward_results.json
 .vscode/
 *.swp
 
-# Local tool config (machine-specific paths / permissions)
-.claude/settings.local.json
+# Local Claude Code config (machine-specific)
+.claude/
 
 # Stray dir created by an old plist that used an unexpanded ${HOME}
 /$*HOME*/
